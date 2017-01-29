@@ -385,9 +385,10 @@ postgres@ip-10-20-11-110~$ exit
 Now we should run the `database_setup.py` to create the database and `lotsofmenus.py` to populate the database initially. Note that inside these files your create engine should point to the new databse now :   
 ```
 engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
-```. 
+```
 
 The basic syntax of this statement is:   
+
 ```
 postgresql://username:password@host:port/database
 ```
