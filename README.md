@@ -1,5 +1,4 @@
 # Linux Server Configuration
-------
 
 This project was made as a part of [Udacity's Full Stack Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004)'s project 5 - Linux Server Configuration. The aim of this project was to host a web application on an Amazon Web Server and configure it to serve our web app and protect it against the basic attack vectors. 
 
@@ -8,14 +7,15 @@ The final website can be visited on this link : http://ec2-52-35-43-246.us-west-
 Please follow the steps in this documentation to successfully configure the aws instance and host the website.
 
 # Accessing the webserver
-----
+
 A user : **_grader_** is created with sudo priveleges. The user has been given key-pair to ssh into the server. The IP address of the server is : **52.35.43.246** and the user can ssh into the system using this command :  
-```ssh grader@52.35.43.246 -p 2200```  
+
+	ssh grader@52.35.43.246 -p 2200  
+	
 _Note : Here -p flag is to mention the port number for SSH_
 After this command, the user is expected to type in the passphrase to log into the server.
 
 # Installed Packages
-----
 
 | Package Name    |Descripton     | 
 | ----------------|:-------------:| 
@@ -34,7 +34,7 @@ After this command, the user is expected to type in the passphrase to log into t
 |**Glances**|	Application monitor for host bugs|
 
 # Summary of Configuration
--------
+
 1. Setup Virtual Machine and SSH into the server.
 2. A new system user grader was created with permission to sudo.
 3. All cuurently installed packages were updated and upgraded.
@@ -53,17 +53,20 @@ After this command, the user is expected to type in the passphrase to log into t
 _Now we will walkthrough the process of configuring the amazon server._
 
 # A. Setup Virtual Machine and SSH into the server
------
+
 A new development environment is created by visiting [Udacity's development environment](https://www.udacity.com/account#!/development_environment)(_only available to Udacity's Nanodegree students_). Follow the steps on the page to download the private key and set up the root user.Take a note of your public IP address - that will be used to visit the final app too.
 
 If everything works out well you should be able to log in to the server using following command :  
-``` ssh -i ~/.ssh/udacity_key.rsa root@52.35.43.246```
+	ssh -i ~/.ssh/udacity_key.rsa root@52.35.43.246
 
 # B. Create a new user with sudo permissions
------
+
 1. Create a new user _grader_ :   
-```root@ip-10-20-11-198:~$ sudo adduser grader```  
+```
+	root@ip-10-20-11-198:~$ sudo adduser grader
+```
 You can check if the user was created by using the _finger_ application.  
+
 ```
      root@ip-10-20-11-198:~$ sudo apt-get install finger
      root@ip-10-20-11-198:~$ finger grader
@@ -73,13 +76,16 @@ You can check if the user was created by using the _finger_ application.
 (a) - Open sudoer configuration using visudo command:
 
     root@ip-10-20-11-198:~# visudo
+    
 A nano editor will open up. scroll down to the line that reads:
 
     root ALL=(ALL:ALL) ALL
+    
 (b) - Below that line, add the new user: grader like so:
 
     root ALL=(ALL:ALL) ALL
     grader ALL=(ALL:ALL) ALL
+    
 Save changes by pressing ctrl+x, y then Enter key.
 
 (c ) - You can list all the users present root.
@@ -87,13 +93,15 @@ Save changes by pressing ctrl+x, y then Enter key.
     root@ip-10-20-11-198:~# cut -d: -f1 /etc/passwd
     
 # C. Update and Upgrade Currently Installed Packages
-----
+
 Update all available packages: This will provide a list of packages to be upgraded.
     
     root@ip-10-20-11-198:~# sudo apt-get update  
+    
 Upgrade packages to newer versions:   
     
     root@ip-10-20-11-198:~# sudo apt-get upgrade   
+    
 Add CRON script to manage update and upgrade installed packages.
 
 (a) - Install unattended-upgrade packages:
@@ -105,36 +113,46 @@ Add CRON script to manage update and upgrade installed packages.
     root@ip-10-20-11-198:~# sudo dpkg-reconfigure -plow unattended-upgrades
     
 # D. Configure SSH 
-----
+
 1. Change the SSH configuration file:
 
 (a)  Access the config file using nano editor:
 
     root@ip-10-20-11-198:~# nano /etc/ssh/sshd_config
+    
 In the nano editor:
 
-(b) Change ```Port 22``` to ```Port 2200```.
+(b) Change `Port 22` to `Port 2200`.
 
-(c.)  Change ```PermitRootLogin without-password``` to ```PermitRootLogin no```
+(c.)  Change `PermitRootLogin without-password` to `PermitRootLogin no`
 
 (d)  Change PasswordAuthentication no to PasswordAuthentication yes.
 
-(e)  At the end of the file, add ```UseDNS``` no and ```AllowUsers grader```. This will allow grader SSH login access.
+(e)  At the end of the file, add `UseDNS` no and `AllowUsers grader`. This will allow grader SSH login access.
 
 (f) Exit nano editor: ctrl+x, y then enter, and Restart SSH service for changes.  
-```root@ip-10-20-11-198:~# sudo service ssh restart  ```  
+```
+root@ip-10-20-11-198:~# sudo service ssh restart  
+```  
 
 Now you can connect to grader from local Machine using :  
-```YOUR LOCAL MACHINE:~$ ssh grader@52.35.43.246 -p 2200```
+```
+YOUR LOCAL MACHINE:~$ ssh grader@52.35.43.246 -p 2200
+```
     
 2. Create a SSH Key Pair:
 
 (a)  Switch to your local machine by using the exit command:
 
-```root@ip-10-20-11-198:~# exit```  
+```
+root@ip-10-20-11-198:~# exit
+```  
+
 Now enter this command to generate a SSH key pair.
 
-```YOUR LOCAL MACHINE:~$ ssh-keygen```  
+```
+YOUR LOCAL MACHINE:~$ ssh-keygen
+```  
 
 Now you are asked to give a filename for the key pair. You can change the **id_rsa** to whatever filename you want. 
 
@@ -142,36 +160,48 @@ You will also be prompted to enter a passphrase which will prevent unauthroized 
 
 Now you will see that ssh-keygen has generated two files : file_name (private_key) and file_name.pub (public_key) file. The file file_name.pub will be placed on the server for authorization.
 
-(b) Switch to the remote server as ```grader``` and create a directory called ```.ssh```
-
+(b) Switch to the remote server as `grader` and create a directory called `.ssh`
+```
     grader@ip-10-20-11-198:~$ mkdir .ssh
-Create a new file within the ```.ssh``` directory called ```authorized_keys```. A  file that will store the public keys.
+```
+
+Create a new file within the `.ssh` directory called `authorized_keys`. A  file that will store the public keys.
 
     grader@ip-10-20-11-198:~$ touch .ssh/authorized_keys
     
 (c.)  Switch back to your Local Machine, and copy the contents of your_file.pub:
-
+```
     YOUR LOCAL MACHINE:~$ sudo cat ~/.ssh/ida_rsa.pub
+```
+
 (d)  Switch back to your Remote Server, edit ```authorized_keys``` file and paste the content of ```your_file.pub``` inside. Save file.
-
+```
     grader@ip-10-20-11-198:~$ sudo nano .ssh/authorized_keys
-(e)  Set specific file permission on SSH and ```authorized_keys``` directories:
+```
 
+(e)  Set specific file permission on SSH and ```authorized_keys``` directories:
+```
     grader@ip-10-20-11-198:~$ chmod 700 .ssh
     grader@ip-10-20-11-198:~$ chmod 644 .ssh/authorized_keys
-(f) SSHD Configuration:
+```
 
+(f) SSHD Configuration:
+```
     grader@ip-10-20-11-198:~$ sudo nano /etc/ssh/sshd_config
+```
 
 Here,change the `PasswordAuthentication yes` to `PasswordAuthentication no`
 
 # E. Configure the UFW 
------
+
 1. Check the UFW status :  
-```grader@ip-10-20-11-198:~$ sudo ufw status```  
+```
+grader@ip-10-20-11-198:~$ sudo ufw status
+```  
 It should be **_inactive_** currently.
 
 2. The standard method to configure the firewall is to disallow all incoming connections and then only allow whatever is necessary. Follow the following commands : 
+
 ```
 grader@ip-10-20-11-198:~$ sudo ufw default deny incoming
 grader@ip-10-20-11-198:~$ sudo ufw allow 2200/tcp
@@ -180,44 +210,65 @@ grader@ip-10-20-11-198:~$ sudo ufw allow 123/udp
 ```
 
 3. You can now enable the firewall :  
-```grader@ip-10-20-11-198:~$ sudo ufw enable```
+```
+grader@ip-10-20-11-198:~$ sudo ufw enable
+```
 
 # F. Configure local Time Zone to UTC
------
+
 1. Open Timezone selection dialog:  
-```grader@ip-10-20-11-198:~$ sudo dpkg-reconfigure tzdata```  
+```
+grader@ip-10-20-11-198:~$ sudo dpkg-reconfigure tzdata
+```  
 A selection menu will open up. Choose **None of the above**,and then choose **UTC**.
 
 2. Setup ntp daemon to improve time sync:  
-```grader@ip-10-20-11-198:~$ sudo apt-get install ntp```
+```
+grader@ip-10-20-11-198:~$ sudo apt-get install ntp
+```
 
 # G. Install and Configure Apache to serve a Python mod_wsgi application
-----
+
 1. Install Apache web Server:   
-```grader@ip-10-20-11-198:~$ sudo apt-get install apache2```
-If apache was installed correctly you should see a default page when you will visit your IP address from develop environment page : ```52.35.43.246```.
+```
+grader@ip-10-20-11-198:~$ sudo apt-get install apache2
+```
+If apache was installed correctly you should see a default page when you will visit your IP address from develop environment page : `52.35.43.246`.
 
 2. Install mod_wsgi, and python-setuptools helper package. This will serve Python apps from Apache:  
-```grader@ip-10-20-11-198:~$ sudo apt-get install python-setuptools libapache2-mod-wsgi```
+```
+grader@ip-10-20-11-198:~$ sudo apt-get install python-setuptools libapache2-mod-wsgi
+```
 
 3. Configure Apache to handle requests using the WSGI module
-```grader@ip-10-20-11-198:~$ sudo nano cat/etc/apache2/sites-enabled/000-default.conf```  
-Add the following line: ```WSGIScriptAlias / /var/www/html/catalog.wsgi``` at the end of the ```<VirtualHost *:80>``` block, right before the closing ```</VirtualHost>```. Now save and quit the nano editor. Restart Apache: ```sudo apache2ctl restart```
+```
+grader@ip-10-20-11-198:~$ sudo nano cat/etc/apache2/sites-enabled/000-default.conf
+```  
+Add the following line: `WSGIScriptAlias / /var/www/html/catalog.wsgi` at the end of the `<VirtualHost *:80>` block, right before the closing `</VirtualHost>`. Now save and quit the nano editor. Restart Apache: `sudo apache2ctl restart`
 
 # H. Install git and configure apache to serve Flask Application
-----
+
 1. Install Git:  
-```grader@ip-10-20-11-198:~$ sudo apt-get install git```
+```
+grader@ip-10-20-11-198:~$ sudo apt-get install git
+```
 
 2. Add aditional library to support apache to serve Flask application :  
-```grader@ip-10-20-11-198:~$ sudo apt-get install libapache2-mod-wsgi python-dev```
+```
+grader@ip-10-20-11-198:~$ sudo apt-get install libapache2-mod-wsgi python-dev
+```
 
 3. Enable ```mod_wsgi``` if not enabled already :  
-```grader@ip-10-20-11-198:~$ sudo a2enmod wsgi``````````
+```
+grader@ip-10-20-11-198:~$ sudo a2enmod wsgi
+```
 
 4. Navigate to the ```wwww``` directory and follow the steps :  
-```grader@ip-10-20-30-101:~$ cd /var/www```  
-Create a directory called `catalog` and withing that, make another directory called `catalog`. The ```/var/www/catalog``` will house our wsgi application which points to the server file, in my case it's name is : _finalproject.py_. Also make two directories ```static`` and ```templates``` inside : ```/var/www/catalog/catalog``` directory. Follow these steps : 
+```
+grader@ip-10-20-30-101:~$ cd /var/www
+```  
+Create a directory called `catalog` and withing that, make another directory called `catalog`. The `/var/www/catalog` will house our wsgi application which points to the server file, in my case it's name is : _finalproject.py_. Also make two directories `static` and `templates` inside : `/var/www/catalog/catalog` directory. Follow these steps : 
+
 ```
     grader@ip-10-20-11-198:/var/www$ sudo mkdir catalog
     grader@ip-10-20-11-198:/var/www$ cd catalog
@@ -238,8 +289,12 @@ sudo pip install psycopg2
 ```
 
 4. Configure and Enable a New Virtual Host that will house our ```.wsgi``` file we are to create. Create a virtual host config file : **_catalog.conf_**  
-```grader@ip-10-20-11-198:/var/www/catalog/catalog$ sudo nano /etc/apache2/sites-available/catalog.conf```  
+```
+grader@ip-10-20-11-198:/var/www/catalog/catalog$ sudo nano /etc/apache2/sites-available/catalog.conf
+```  
+
 And type the following code :
+
 ```
 <VirtualHost *:80>
       ServerName 52.35.43.246
@@ -260,11 +315,12 @@ And type the following code :
   </VirtualHost>
 ```
 
-5. Create the ```catalog.wsgi``` file. The contents of the file is to point to the right application logic file. This file will be created in ```/var/www/catalog``` directory. Follow the steps : 
+5. Create the `catalog.wsgi` file. The contents of the file is to point to the right application logic file. This file will be created in `/var/www/catalog` directory. Follow the steps : 
 ```
 grader@ip-10-20-11-198:/var/www/catalog/catalog$ cd /var/www/catalog
 grader@ip-10-20-11-198:/var/www/catalog$ sudo nano catalog.wsgi
 ```
+
 Paste the following code when the nano editor opens up :
 ```
 #!/user/bin/python
@@ -276,54 +332,71 @@ sys.path.insert(0,"/var/www/catalog/catalog/")
 from finalproject import app as application
 application.secret_key = 'your_super_secret_key'
 ```
-##### Please note that here I have mentioned ```finalproject``` because that is the file which house my application logic. You should edit it accordingly if your file name is ```__init__.py``` or anything else.    
+##### Please note that here I have mentioned `finalproject` because that is the file which houses my application logic. You should edit it accordingly if your file name is `__init__.py` or anything else.    
 
  6. Enable the virtual host :  
-grader@ip-10-20-11-198:/var/www/catalog$ sudo a2ensite catalog.wsgi```       
+```
+grader@ip-10-20-11-198:/var/www/catalog$ sudo a2ensite catalog.wsgi
+```
 and restart the apache service   
-grader@ip-10-20-11-198:/var/www/catalog$ sudo service apache2 restart ```  
+```
+grader@ip-10-20-11-198:/var/www/catalog$ sudo service apache2 restart 
+```  
 
 7. Clone your git repository :   
-```grader@ip-10-20-11-198:/var/www/catalog$ sudo git clone https://github.com/abhi18/Restaurant-Catalog-App.git```  
- Now follow these commands to copy the content into ```/var/www/catalog/catalog/``` :
+```
+grader@ip-10-20-11-198:/var/www/catalog$ sudo git clone https://github.com/GITHUB_USERNAME/PROJECT_NAME.git
+```  
+ Now follow these commands to copy the content into `/var/www/catalog/catalog/` :
+ 
 ```
 grader@ip-10-20-11-198:/var/www/catalog$ mv Restaurant-Catalog-App/* /var/Catalog/catalog
 grader@ip-10-20-11-198:/var/www/catalog$ sudo rm -f Restaurant-Catalog-App
 ```
+
 # I. Set up Postgresql
-----
+
 Now we will install and configure **Postgresql**. We will also create a user - **catalog** with previleges to create database only which will be password protected. Follow the steps :
+
 ```
 sudo apt-get install postgresql
 ```
+
 Change the default user to postgres by typing : ```sudo su postgres``` and then type in ```psql```
+
 ```
 postgres=# CREATE USER catalog WITH PASSWORD 'catalog';
 postgres=# ALTER USER catalog CREATEDB;
 postgres=# CREATE DATABASE catalog WITH OWNER catalog;
 ```
+
 Revoke all rights on the database schema, and grant access to catalog only.
 ```
 catalog=# REVOKE ALL ON SCHEMA public FROM public;
 catalog=# GRANT ALL ON SCHEMA public TO catalog;
 ```
+
 Exit Postgresql and postgres user:
 ```
 postgres=# \q
 postgres@ip-10-20-11-110~$ exit
 ```
-Now we should run the ```database_setup.py``` to create the database and ```lotsofmenus.py``` to populate the database initially. Note that inside these files your create engine should point to the new databse now :   
-```engine = create_engine('postgresql://catalog:catalog@localhost/catalog')```. 
+
+Now we should run the `database_setup.py` to create the database and `lotsofmenus.py` to populate the database initially. Note that inside these files your create engine should point to the new databse now :   
+```
+engine = create_engine('postgresql://catalog:catalog@localhost/catalog')
+```. 
 
 The basic syntax of this statement is:   
-``` postgresql://username:password@host:port/database```
+```
+postgresql://username:password@host:port/database
+```
 
 # J. Configure Oauth credentials for 3rd party authentication 
----------
 
-1. Now that we are on a server the paths to ```client_secrets.json``` and ```fb_client_secrets.json``` should be changed to their absolute paths : ```/var/www/catalog/catalog/client_secrets.json``` and ```/var/www/catalog/catalog/fb_client_secrets.json```. 
+1. Now that we are on a server the paths to `client_secrets.json` and `fb_client_secrets.json` should be changed to their absolute paths : `/var/www/catalog/catalog/client_secrets.json` and `/var/www/catalog/catalog/fb_client_secrets.json`. 
 
-Wherever you see the old path you must change to this new absolute path. Common places are in ```gconnect()``` and ```fbconnect()``` functions and the place where ```CLIENT_ID``` is mentioned!
+Wherever you see the old path you must change to this new absolute path. Common places are in `gconnect()` and `fbconnect()` functions and the place where `CLIENT_ID` is mentioned!
 
 In **_gconnect():_**
 
@@ -356,7 +429,6 @@ _http://ec2-52-35-43-246.us-west-2.compute.amazonaws.com_ and under **Authorize 
 
 
 # K. Install fail2ban and glances 
-----------
 
 Fail2Ban is a service that can protect a system that is being targeted by brute force attacks or other botting threats. We will configure Fail2Ban to protect our ssh connection, as well as Apache itself.
 
@@ -394,8 +466,8 @@ grader@ip-10-20-11-198:~$ sudo service fail2ban start
 ```
 
 # L. Final Steps :
------
-To see the app live visit : http://ec2-52-35-43-246.us-west-2.compute.amazonaws.com/. If you face any errors go to ```/var/log/apache2/error.log``` to see the log.
+
+To see the app live visit : http://ec2-52-35-43-246.us-west-2.compute.amazonaws.com/. If you face any errors go to `/var/log/apache2/error.log` to see the log.
 
 -----------------------------
 
