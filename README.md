@@ -9,8 +9,9 @@ Please follow the steps in this documentation to successfully configure the aws 
 # Accessing the webserver
 
 A user : **_grader_** is created with sudo priveleges. The user has been given key-pair to ssh into the server. The IP address of the server is : **52.35.43.246** and the user can ssh into the system using this command :  
-
-	ssh grader@52.35.43.246 -p 2200  
+```shell
+ssh grader@52.35.43.246 -p 2200  
+```
 	
 _Note : Here -p flag is to mention the port number for SSH_
 After this command, the user is expected to type in the passphrase to log into the server.
@@ -86,7 +87,7 @@ A nano editor will open up. scroll down to the line that reads:
     root ALL=(ALL:ALL) ALL
     grader ALL=(ALL:ALL) ALL
     
-Save changes by pressing ctrl+x, y then Enter key.
+Save changes by pressing `ctrl+x` and press `y` and then press Enter key.
 
 (c ) - You can list all the users present root.
 
