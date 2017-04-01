@@ -129,11 +129,11 @@ In the nano editor:
 
 (c.)  Change `PermitRootLogin without-password` to `PermitRootLogin no`
 
-(d)  Change PasswordAuthentication no to PasswordAuthentication yes.
+(d)  Change `PasswordAuthentication no` to `PasswordAuthentication yes`.
 
-(e)  At the end of the file, add `UseDNS` no and `AllowUsers grader`. This will allow grader SSH login access.
+(e)  At the end of the file, add `UseDNS no` and `AllowUsers grader`. This will allow `grader` SSH login access.
 
-(f) Exit nano editor: ctrl+x, y then enter, and Restart SSH service for changes.  
+(f) Exit nano editor: **ctrl+x, y** then enter, and Restart SSH service for changes.  
 ```
 root@ip-10-20-11-198:~# sudo service ssh restart  
 ```  
