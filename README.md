@@ -58,19 +58,21 @@ _Now we will walkthrough the process of configuring the amazon server._
 A new development environment is created by visiting [Udacity's development environment](https://www.udacity.com/account#!/development_environment)(_only available to Udacity's Nanodegree students_). Follow the steps on the page to download the private key and set up the root user.Take a note of your public IP address - that will be used to visit the final app too.
 
 If everything works out well you should be able to log in to the server using following command :  
-	ssh -i ~/.ssh/udacity_key.rsa root@52.35.43.246
+```
+ssh -i ~/.ssh/udacity_key.rsa root@52.35.43.246
+```
 
 # B. Create a new user with sudo permissions
 
 1. Create a new user _grader_ :   
 ```
-	root@ip-10-20-11-198:~$ sudo adduser grader
+root@ip-10-20-11-198:~$ sudo adduser grader
 ```
 You can check if the user was created by using the _finger_ application.  
 
 ```
-     root@ip-10-20-11-198:~$ sudo apt-get install finger
-     root@ip-10-20-11-198:~$ finger grader
+root@ip-10-20-11-198:~$ sudo apt-get install finger
+root@ip-10-20-11-198:~$ finger grader
 ```
 2. Give the new user sudo permission:
 
