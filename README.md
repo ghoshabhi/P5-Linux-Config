@@ -495,4 +495,7 @@ To see the app live visit : http://ec2-52-35-43-246.us-west-2.compute.amazonaws.
 
 ### Improvements:
 
-The app runs into a problem when trying to visit the menu items without logging in. Also there are some broken image links. After logging out the authorised access to delete the restaurant and menu items is granted. Needs pagination.
+1) The app runs into a problem when trying to visit the menu items without logging in
+2) Fix broken image links
+3) User can still do the CRUD operations, after logging out
+4) Needs pagination
